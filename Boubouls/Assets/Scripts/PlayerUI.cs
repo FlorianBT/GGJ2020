@@ -7,6 +7,8 @@ public class PlayerUI : MonoBehaviour
     public Vector2 m_PosOffset2D = new Vector2(0.0f, 0.0f);
     public float m_Radius = 60.0f;
     public PlayerComponent m_PlayerComponent;
+    public ControlIconComponent m_InteractControlIcon;
+    public Vector2 m_ControlIconOffset2D = new Vector2(0.0f, 2.0f);
 
     private void Awake()
     {
@@ -25,13 +27,14 @@ public class PlayerUI : MonoBehaviour
     void Update()
     {
         UpdateAimPointerPosition();
+        UpdateClosestInteractive();
     }
 
     void UpdateAimPointerPosition()
     {
         Vector2 playerPos = m_PlayerComponent.transform.position;
         Vector2 aimDir = m_PlayerComponent.m_AimingDir;
-        Debug.Log(aimDir);
+
         if (aimDir == Vector2.zero)
         {
             m_AimPointer.enabled = false;
@@ -41,6 +44,24 @@ public class PlayerUI : MonoBehaviour
             m_AimPointer.enabled = true;
             Vector2 screenPos = Camera.main.WorldToScreenPoint(playerPos);
             m_AimPointer.rectTransform.anchoredPosition = screenPos + aimDir * m_Radius + m_PosOffset2D;
+        }
+    }
+
+    void UpdateClosestInteractive()
+    {
+        InteractiveComponent inter = m_PlayerComponent.ClosestInteractive;
+        if (inter != null)
+        {
+            m_InteractControlIcon.SetVisibility(true);
+            m_InteractControlIcon.AlignOn(inter, m_ControlIconOffset2D);
+            if (inter.holdDuration > 0f && m_PlayerComponent.InteractDuration > 0f)
+            {
+                 m_InteractControlIcon.Fill(m_PlayerComponent.InteractDuration / inter.holdDuration);
+            }
+        }
+        else
+        {
+            m_InteractControlIcon.SetVisibility(false);
         }
     }
 }
