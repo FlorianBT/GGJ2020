@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Collider: {fileID: 1099190538}
-  m_OnEnter:
+  OnEnterEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7307450649814278147}
@@ -127,7 +127,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnExit:
+  OnExitEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!95 &4127901427245988795

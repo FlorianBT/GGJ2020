@@ -43,7 +43,7 @@
                     "id": "4c5292c0-28a6-46b2-b203-4972d7cc4887",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press(behavior=2)"
                 },
                 {
                     "name": "TeleportDebug",
@@ -320,7 +320,7 @@
                     "name": "",
                     "id": "9b160c47-619f-4d6d-b73c-7a4f1abc0d54",
                     "path": "<Keyboard>/e",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Interact",

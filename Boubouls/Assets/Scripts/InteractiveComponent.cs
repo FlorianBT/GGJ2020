@@ -2,10 +2,12 @@ using UnityEngine;
 
 public abstract class InteractiveComponent : MonoBehaviour
 {
+    public float holdDuration = 2.5f;
+
     public bool Used
     {
-        get; private set;
+        get; protected set;
     }
 
-    public abstract void Interact();
+    public abstract void Interact(float elapsedTime);
 }

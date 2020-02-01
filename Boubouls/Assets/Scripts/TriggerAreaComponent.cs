@@ -11,8 +11,8 @@ public class TriggerAreaComponent<T,U> : MonoBehaviour
 {
     public Collider2D m_Collider = null;
 
-    public U m_OnEnter;
-    public U m_OnExit;
+    public U OnEnterEvent;
+    public U OnExitEvent;
 
     private void Awake()
     {
@@ -30,29 +30,29 @@ public class TriggerAreaComponent<T,U> : MonoBehaviour
     }
     private void Start()
     {
-        if (m_OnEnter == null)
-            m_OnEnter = default;
-        if (m_OnExit == null)
-            m_OnExit = default;
+        if (OnEnterEvent == null)
+            OnEnterEvent = default;
+        if (OnExitEvent == null)
+            OnExitEvent = default;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         T comp = col.GetComponent<T>();
-        if(comp != null && m_OnEnter != null)
+        if(comp != null && OnEnterEvent != null)
         {
             Debug.Log("[" + name + "] Target " + comp + " entered trigger");
-            InvokeWithDynVal(m_OnEnter, comp);
+            InvokeWithDynVal(OnEnterEvent, comp);
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
         T comp = col.GetComponent<T>();
-        if (comp != null && m_OnExit != null)
+        if (comp != null && OnExitEvent != null)
         {
             Debug.Log("[" + name + "] Target " + comp + " exited trigger");
-            InvokeWithDynVal(m_OnExit, comp);
+            InvokeWithDynVal(OnExitEvent, comp);
         }
     }
 
