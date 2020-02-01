@@ -12,9 +12,11 @@ public class PlayerComponent : MonoBehaviour
     public uint m_CurrentJumpCount = 0;
 
     public Rigidbody2D m_ProjectileGameObject = null;
-    public SpriteRenderer m_SpriteRenderer = null;
     public float m_ProjectileForce = 500.0f;
     public GameObject m_MuzzleDummy;
+
+    public SpriteRenderer m_SpriteRenderer = null;
+    public Animator m_Animator = null;
 
     public Vector2 m_AimingDir { get; private set; } = new Vector2();
     private Vector2 m_MousePosition = new Vector2();
@@ -47,6 +49,9 @@ public class PlayerComponent : MonoBehaviour
     {
         if (m_SpriteRenderer == null)
             return;
+
+        float horizontalVelocity = Mathf.Abs(m_Rigidbody2D.velocity.x);
+        m_Animator.SetFloat("Speed", horizontalVelocity);
 
         if (m_Rigidbody2D.velocity != Vector2.zero)
         {

@@ -10,6 +10,7 @@ public class BouboulAIComponent : MonoBehaviour
     private Rigidbody2D m_Rigidbody = null;
     [SerializeField]
     public SpriteRenderer m_SpriteRenderer = null;
+    public Animator m_Animator = null;
 
     public Vector2 m_Velocity = new Vector2(0.0f, 0.0f);
 
@@ -68,6 +69,10 @@ public class BouboulAIComponent : MonoBehaviour
             rotation = Quaternion.Euler(0.0f, 0.0f, Random.Range(-15.0f, 15.0f));
         }
         m_Rigidbody.AddForce(rotation * transform.up * GetJumpForce());
+        if (m_Animator != null)
+        {
+            m_Animator.SetTrigger("Jump");
+        }
     }
 
     void Update()
@@ -163,6 +168,10 @@ public class BouboulAIComponent : MonoBehaviour
         {
             m_OnGround = true;
             m_delayBeforeJumpTimer = 0.0f;
+            if (m_Animator != null)
+            {
+                m_Animator.SetTrigger("OnGround");
+            }
         }
     }
 

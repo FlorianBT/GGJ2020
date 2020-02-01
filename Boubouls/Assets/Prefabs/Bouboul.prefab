@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7307450649667459654}
   - component: {fileID: 1099190538}
   - component: {fileID: 1099190537}
+  - component: {fileID: 4127901427245988795}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -112,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Collider: {fileID: 1099190538}
-  m_OnEnter:
+  OnEnterEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7307450649814278147}
@@ -126,9 +127,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnExit:
+  OnExitEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &4127901427245988795
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7307450649667459704}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2bcc5e8300dc51349b91f7279908eb65, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7307450649814278151
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,6 +235,7 @@ MonoBehaviour:
   m_PlayerTag: Player
   m_MovementSpeed: 4
   m_SpriteRenderer: {fileID: 7307450649667459654}
+  m_Animator: {fileID: 4127901427245988795}
   m_Velocity: {x: 0, y: 0}
   m_delayBeforeJump: {x: 0.75, y: 1.25}
   m_delayBeforeJumpTimer: 0
