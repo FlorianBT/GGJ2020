@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BouboulAIComponent : MonoBehaviour
@@ -23,6 +21,7 @@ public class BouboulAIComponent : MonoBehaviour
     public Vector2 m_JumpForce = new Vector2(130, 170);
 
     public bool m_IsCarried = false;
+    public bool m_isOwned = true;
 
     [Header("Debug")]
     [SerializeField]
@@ -77,7 +76,7 @@ public class BouboulAIComponent : MonoBehaviour
             Jump();
         }
 
-        if (m_Player != null)
+        if (m_isOwned && m_Player != null)
         {
             Vector2 meToPlayer = (m_Player.transform.position - transform.position);
             meToPlayer.y = 0;
@@ -141,5 +140,11 @@ public class BouboulAIComponent : MonoBehaviour
             m_OnGround = true;
             m_delayBeforeJumpTimer = 0.0f;
         }
+    }
+
+    public void OnCollectedByPlayer(PlayerComponent playerComponent)
+    {
+        Debug.Log("Collected By Player");
+        m_isOwned = true;
     }
 }

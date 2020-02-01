@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7307450649667459705}
   - component: {fileID: 7307450649667459654}
+  - component: {fileID: 1099190538}
+  - component: {fileID: 1099190537}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -81,6 +83,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1099190538
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7307450649667459704}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &1099190537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7307450649667459704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13257068d01fd4e47b06b416ed772f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Collider: {fileID: 1099190538}
+  m_OnEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7307450649814278147}
+        m_MethodName: OnCollectedByPlayer
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: PlayerComponent, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7307450649814278151
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,12 +213,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayerTag: Player
-  m_MovementSpeed: 6
+  m_MovementSpeed: 4
   m_Velocity: {x: 0, y: 0}
-  m_delayBeforeJump: {x: 0.8, y: 1.1}
+  m_delayBeforeJump: {x: 0.75, y: 1.25}
   m_delayBeforeJumpTimer: 0
-  m_MaxDistanceWithPlayer: 2.5
+  m_MaxDistanceWithPlayer: 3
   m_MinDistanceWithPlayer: 1.5
   m_JumpForce: {x: 130, y: 170}
+  m_IsCarried: 0
+  m_isOwned: 0
   m_OnGround: 0
   m_IsFollowing: 0

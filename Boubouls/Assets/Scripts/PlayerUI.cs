@@ -31,7 +31,6 @@ public class PlayerUI : MonoBehaviour
     {
         Vector2 playerPos = m_PlayerComponent.transform.position;
         Vector2 aimDir = m_PlayerComponent.m_AimingDir;
-        Debug.Log(aimDir);
         if (aimDir == Vector2.zero)
         {
             m_AimPointer.enabled = false;

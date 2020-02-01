@@ -9,20 +9,27 @@ public class TriggerAreaComponent<T,U> : MonoBehaviour
     where T : MonoBehaviour 
     where U : UnityEvent<T>
 {
-    private Collider2D m_Collider;
+    public Collider2D m_Collider = null;
 
     public U m_OnEnter;
     public U m_OnExit;
 
-    private void Start()
+    private void Awake()
     {
-        m_Collider = GetComponent<Collider2D>();
-        if(!m_Collider.isTrigger)
+        if (m_Collider == null)
+        {
+            Debug.LogError("Collider should not be null on gameObject " + gameObject.name);
+            return;
+        }
+
+        if (!m_Collider.isTrigger)
         {
             m_Collider.isTrigger = true;
             Debug.LogWarning("TriggerArea object [" + name + "] collider has isTrigger set to false !");
         }
-
+    }
+    private void Start()
+    {
         if (m_OnEnter == null)
             m_OnEnter = default;
         if (m_OnExit == null)
