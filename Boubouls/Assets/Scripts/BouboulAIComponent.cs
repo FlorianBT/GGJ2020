@@ -172,4 +172,10 @@ public class BouboulAIComponent : MonoBehaviour
         m_Player = playerComponent;
         m_isOwned = true;
     }
+
+    public void Explode()
+    {
+        //TODO spawn death animation
+        GameObject.Destroy(gameObject);
+    }
 }
