@@ -11,7 +11,8 @@ public class PlayerComponent : MonoBehaviour
     public uint m_AllowedJumpCount = 2;
     public uint m_CurrentJumpCount = 0;
 
-    public Rigidbody2D m_ProjectileGameObject;
+    public Rigidbody2D m_ProjectileGameObject = null;
+    public SpriteRenderer m_SpriteRenderer = null;
     public float m_ProjectileForce = 500.0f;
     public GameObject m_MuzzleDummy;
 
@@ -39,6 +40,29 @@ public class PlayerComponent : MonoBehaviour
     void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        UpdateSpriteRenderer();
+    }
+
+    void UpdateSpriteRenderer()
+    {
+        if (m_SpriteRenderer == null)
+            return;
+
+        if (m_Rigidbody2D.velocity != Vector2.zero)
+        {
+            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) > 0.0f)
+            {
+                m_SpriteRenderer.flipX = false;
+            }
+            else
+            {
+                m_SpriteRenderer.flipX = true;
+            }
+        }
     }
 
     public float GetCurrentSpeed()
