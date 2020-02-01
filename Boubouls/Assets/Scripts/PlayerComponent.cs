@@ -45,6 +45,14 @@ public class PlayerComponent : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
+    public void Reset()
+    {
+        if (m_SpriteRenderer != null)
+        {
+            m_SpriteRenderer.flipX = false;
+        }
+    }
+
     void UpdateSpriteRenderer()
     {
         if (m_SpriteRenderer == null)
@@ -53,9 +61,9 @@ public class PlayerComponent : MonoBehaviour
         float horizontalVelocity = Mathf.Abs(m_Rigidbody2D.velocity.x);
         m_Animator.SetFloat("Speed", horizontalVelocity);
 
-        if (Mathf.Abs(m_Rigidbody2D.velocity.x) > Mathf.Epsilon)
+        if (horizontalVelocity > Mathf.Epsilon)
         {
-            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) >= 0.0f)
+            if (Vector3.Dot(m_Rigidbody2D.velocity.normalized, Vector3.right) >= Mathf.Epsilon)
             {
                 m_SpriteRenderer.flipX = false;
             }
