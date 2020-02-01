@@ -21,6 +21,8 @@ public class ArtifactComponent : InteractiveComponent
             Debug.Log("ARTIFACT REPAIRED!!");
             GetComponent<SpriteRenderer>().sprite = RepairedSprite;
             //TODO trigger shit
+
+            EventManager.TriggerEvent("ArtifactDestroyed");
         }
     }
 }

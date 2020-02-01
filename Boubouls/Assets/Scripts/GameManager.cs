@@ -7,12 +7,14 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    public string[] m_Scenes = new string[] { "GameScene", "NextGameScene" };
+    private string[] m_Scenes = new string[] { "FirstScene", "Tibo", "Florian", "Main" };
 
     public int m_CurrentSceneIndex = 0;
     public CanvasGroup m_FaderCanvasGroup;
     public float m_FadeDuration = 2.0f;
     public bool m_IsFading = false;
+    public PlayerComponent m_PlayerPrefab = null;
+    private PlayerComponent m_PlayerRef = null;
 
     UnityEvent OnFadeFinished;
 
@@ -23,13 +25,47 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
         Debug.Log("Application started at " + FormatDate());
         DontDestroyOnLoad(this);
+        DontDestroyOnLoad(m_FaderCanvasGroup.transform.parent);
+        SpawnPlayer();
+
+        OnBeginNewScene();
+    }
+
+    void SpawnPlayer()
+    {
+        m_PlayerRef = Instantiate<PlayerComponent>(m_PlayerPrefab);
+        m_PlayerRef.gameObject.name = "LocalPlayer";
+        DontDestroyOnLoad(m_PlayerRef);
+    }
+
+    void TeleportPlayerToSpawnPoint()
+    {
+        GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+        m_PlayerRef.transform.position = spawnPoint.transform.position;
+        Debug.Log("Player has been teleported to this location: " + spawnPoint.name);
+
+        EventManager.TriggerEvent("LocalPlayerSpawned");
+    }
+
+    void OnBeginNewScene()
+    {
+        TeleportPlayerToSpawnPoint();
         FadeIn();
 
         DisableInputs();
         OnFadeFinished.AddListener(OnBeginFadeFinished);
+
+        EventManager.StartListening("ArtifactDestroyed", OnArtifactDestroyed);
+    }
+
+    void OnArtifactDestroyed()
+    {
+        EventManager.StopListening("ArtifactDestroyed", OnArtifactDestroyed);
+
+        Debug.Log("[GAMEMANAGER] On Artifact Destroyed!");
+        OnLevelFinished();
     }
 
     void DisableInputs()
@@ -55,9 +91,11 @@ public class GameManager : MonoBehaviour
             if (playerInput != null)
             {
                 playerInput.SwitchCurrentActionMap("Player");
+                Debug.Log("Inputs enabled successfully!");
+                return;
             }
         }
-        Debug.Log("Inputs enabled successfully!");
+        Debug.Log("Inputs not enabled.");
     }
 
     void OnBeginFadeFinished()
@@ -78,37 +116,50 @@ public class GameManager : MonoBehaviour
         StartCoroutine(Fade(1.0f));
     }
 
-    IEnumerator LoadNextScene()
+    void LoadNextScene()
     {
-        yield return StartCoroutine(LoadSceneAndSetActive(m_Scenes[m_CurrentSceneIndex++]));
+        int newSceneIndex = m_CurrentSceneIndex + 1;
+        StartCoroutine(AsynchronousLoadAndUnload(m_Scenes[newSceneIndex], m_Scenes[m_CurrentSceneIndex]));
+        m_CurrentSceneIndex = newSceneIndex;
     }
 
     public void OnLevelFinished()
     {
+        DisableInputs();
         FadeOut();
+        OnFadeFinished.AddListener(OnEndLevelFadeOutFinished);
     }
 
-    public IEnumerator AsynchronousLoadAndUnload(string scene, int index)
+    public void OnEndLevelFadeOutFinished()
+    {
+        Debug.Log("OnEndLevelFadeOutFinished");
+        OnFadeFinished.RemoveListener(OnEndLevelFadeOutFinished);
+        LoadNextScene();
+    }
+
+    public IEnumerator AsynchronousLoadAndUnload(string scene, string oldScene)
     {
         yield return null;
-        AsyncOperation ao = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
-        ao.allowSceneActivation = false;
+        AsyncOperation loadAO = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
+        loadAO.allowSceneActivation = false;
 
-        while (!ao.isDone)
+        while (!loadAO.isDone)
         {
             // [0, 0.9] > [0, 1]
-            float progress = Mathf.Clamp01(ao.progress / 0.9f);
+            float progress = Mathf.Clamp01(loadAO.progress / 0.9f);
             Debug.Log("Loading progress: " + (progress * 100) + "%");
 
             // Loading completed
-            if (ao.progress == 0.9f)
+            if (loadAO.progress == 0.9f)
             {
-                ao.allowSceneActivation = true;
+                loadAO.allowSceneActivation = true;
             }
 
             yield return null;
-            SceneManager.UnloadSceneAsync(index);
+
         }
+
+        OnBeginNewScene();
     }
 
     public IEnumerator LoadSceneAndSetActive(string sceneName)
