@@ -33,6 +33,7 @@ public class PlayerComponent : MonoBehaviour
     private Vector2 m_Velocity = new Vector2();
 
     private List<InteractiveComponent> m_InteractivesInRange;
+    private float m_InteractStart = -1f;
 
     private void Awake()
     {
@@ -44,11 +45,6 @@ public class PlayerComponent : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
-    {
-        UpdateSpriteRenderer();
-    }
-
     void UpdateSpriteRenderer()
     {
         if (m_SpriteRenderer == null)
@@ -57,9 +53,9 @@ public class PlayerComponent : MonoBehaviour
         float horizontalVelocity = Mathf.Abs(m_Rigidbody2D.velocity.x);
         m_Animator.SetFloat("Speed", horizontalVelocity);
 
-        if (m_Rigidbody2D.velocity != Vector2.zero)
+        if (Mathf.Abs(m_Rigidbody2D.velocity.x) > Mathf.Epsilon)
         {
-            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) > 0.0f)
+            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) >= 0.0f)
             {
                 m_SpriteRenderer.flipX = false;
             }
@@ -81,6 +77,18 @@ public class PlayerComponent : MonoBehaviour
             return m_Speed;
         }
 
+    }
+
+    private void Update()
+    {
+        UpdateSpriteRenderer();
+
+        if (ClosestInteractive != null && m_InteractStart >= 0f)
+        {
+            ClosestInteractive.Interact(Time.time - m_InteractStart);
+        }
+
+        m_InteractivesInRange.RemoveAll((inter) => { return inter.Used; });
     }
 
     void FixedUpdate()
@@ -155,7 +163,11 @@ public class PlayerComponent : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        Debug.Log("Interact");
+        m_InteractStart = value.isPressed ? Time.time : -1f;
+    }
+
+    public float InteractDuration {
+        get { return m_InteractStart >= 0f ? Time.time - m_InteractStart : 0f; }
     }
 
     public void OnCollisionEnter2D(Collision2D collision2D)
@@ -168,14 +180,27 @@ public class PlayerComponent : MonoBehaviour
 
     public void RegisterInteractive(InteractiveComponent inter)
     {
-        Debug.Log("Adding interactive " + inter);
-        if(!m_InteractivesInRange.Contains(inter))
-            m_InteractivesInRange.Add(inter);
+        if (m_InteractivesInRange.Contains(inter)) return;
+
+        m_InteractivesInRange.Add(inter);
+        m_InteractivesInRange.Sort(
+            delegate (InteractiveComponent c1, InteractiveComponent c2)
+            {
+                float dist1 = Mathf.Abs(c1.transform.position.x - transform.position.x);
+                float dist2 = Mathf.Abs(c2.transform.position.x - transform.position.x);
+                if (Mathf.Abs(dist1 - dist2) <= Mathf.Epsilon) return 0;
+                else if (dist1 > dist2) return 1;
+                else return -1;
+            }
+        );
     }
 
     public void ForgetInteractive(InteractiveComponent inter)
     {
-        Debug.Log("Removing interactive " + inter);
         m_InteractivesInRange.Remove(inter);
+    }
+
+    public InteractiveComponent ClosestInteractive {
+        get { return (m_InteractivesInRange.Count > 0 ? m_InteractivesInRange[0] : null); }
     }
 }

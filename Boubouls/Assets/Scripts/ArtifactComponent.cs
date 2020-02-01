@@ -1,9 +1,26 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class ArtifactComponent : InteractiveComponent
 {
-    public override void Interact()
+    public Sprite BrokenSprite;
+    public Sprite RepairedSprite;
+
+    private void Start()
     {
-        Debug.Log("Interacting in artifact");
+        GetComponent<SpriteRenderer>().sprite = Used ? RepairedSprite : BrokenSprite;
+    }
+
+    public override void Interact(float elapsedTime)
+    {
+        if (Used) return;
+
+        Used = elapsedTime >= holdDuration;
+        if(Used)
+        {
+            Debug.Log("ARTIFACT REPAIRED!!");
+            GetComponent<SpriteRenderer>().sprite = RepairedSprite;
+            //TODO trigger shit
+        }
     }
 }

@@ -6,7 +6,7 @@ public class BouboulAIComponent : MonoBehaviour
     public string m_PlayerTag = "Player";
     public float m_MovementSpeed = 4.0f;
 
-    private GameObject m_Player = null;
+    private PlayerComponent m_Player = null;
     private Rigidbody2D m_Rigidbody = null;
     [SerializeField]
     public SpriteRenderer m_SpriteRenderer = null;
@@ -57,7 +57,6 @@ public class BouboulAIComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Player = GameObject.FindGameObjectWithTag(m_PlayerTag);
         m_Rigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -73,6 +72,7 @@ public class BouboulAIComponent : MonoBehaviour
         if (m_Animator != null)
         {
             m_Animator.SetTrigger("Jump");
+            m_Animator.SetBool("OnGround", false);
         }
     }
 
@@ -158,7 +158,7 @@ public class BouboulAIComponent : MonoBehaviour
             for (int i = 0; i < collision.contacts.Length; i++)
             {
                 ContactPoint2D contact = collision.contacts[0];
-                if (Vector3.Dot(contact.normal, Vector3.up) > 0.5)
+                if (Vector3.Dot(contact.normal, Vector3.up) > 0.35)
                 {
                     collisionFromBottom = true;
                 }
@@ -172,6 +172,7 @@ public class BouboulAIComponent : MonoBehaviour
             if (m_Animator != null)
             {
                 m_Animator.SetTrigger("OnGround");
+                m_Animator.SetBool("OnGround", true);
             }
         }
     }
@@ -179,6 +180,13 @@ public class BouboulAIComponent : MonoBehaviour
     public void OnCollectedByPlayer(PlayerComponent playerComponent)
     {
         Debug.Log("Collected By Player");
+        m_Player = playerComponent;
         m_isOwned = true;
+    }
+
+    public void Explode()
+    {
+        //TODO spawn death animation
+        GameObject.Destroy(gameObject);
     }
 }
