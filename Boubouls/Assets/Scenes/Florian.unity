@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 617548750}
   - component: {fileID: 617548749}
   - component: {fileID: 617548748}
+  - component: {fileID: 617548752}
   m_Layer: 0
   m_Name: TestCollectible
   m_TagString: Untagged
@@ -149,9 +150,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 617548747}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32e86b776ce66884c884ce2c1825e550, type: 3}
+  m_Script: {fileID: 11500000, guid: 56d0a51d36595814ea48335a4beb55d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 617548752}
+        m_MethodName: Collect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!58 &617548749
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -232,6 +250,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &617548752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617548747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e86b776ce66884c884ce2c1825e550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &912019492
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,6 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de081d463170f746a1caa8d23a2b949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Player: {fileID: 0}
 --- !u!50 &932731895
 Rigidbody2D:
   serializedVersion: 4
@@ -490,9 +521,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1907962380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 094084b43ea695c4c8df5f7ae19f19d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 56d0a51d36595814ea48335a4beb55d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!58 &1907962382
 CircleCollider2D:
   m_ObjectHideFlags: 0
