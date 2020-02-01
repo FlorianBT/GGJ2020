@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BouboulAIComponent : MonoBehaviour
@@ -10,6 +8,8 @@ public class BouboulAIComponent : MonoBehaviour
 
     private GameObject m_Player = null;
     private Rigidbody2D m_Rigidbody = null;
+    [SerializeField]
+    public SpriteRenderer m_SpriteRenderer = null;
 
     public Vector2 m_Velocity = new Vector2(0.0f, 0.0f);
 
@@ -23,6 +23,7 @@ public class BouboulAIComponent : MonoBehaviour
     public Vector2 m_JumpForce = new Vector2(130, 170);
 
     public bool m_IsCarried = false;
+    public bool m_isOwned = false;
 
     [Header("Debug")]
     [SerializeField]
@@ -62,7 +63,12 @@ public class BouboulAIComponent : MonoBehaviour
     void Jump()
     {
         m_OnGround = false;
-        m_Rigidbody.AddForce(transform.up * GetJumpForce());
+        Quaternion rotation = Quaternion.identity;
+        if (m_isOwned)
+        {
+            rotation = Quaternion.Euler(0.0f, 0.0f, Random.Range(-15.0f, 15.0f));
+        }
+        m_Rigidbody.AddForce(rotation * transform.up * GetJumpForce());
     }
 
     void Update()
@@ -70,6 +76,7 @@ public class BouboulAIComponent : MonoBehaviour
         if (m_IsCarried)
             return;
 
+        UpdateSpriteRenderer();
         UpdateTimers();
 
         if (m_OnGround && m_delayBeforeJumpTimer > GetDelayBeforeJump())
@@ -77,7 +84,7 @@ public class BouboulAIComponent : MonoBehaviour
             Jump();
         }
 
-        if (m_Player != null)
+        if (m_isOwned && m_Player != null)
         {
             Vector2 meToPlayer = (m_Player.transform.position - transform.position);
             meToPlayer.y = 0;
@@ -121,6 +128,23 @@ public class BouboulAIComponent : MonoBehaviour
         m_delayBeforeJumpTimer += Time.deltaTime;
     }
 
+    void UpdateSpriteRenderer()
+    {
+        if (m_SpriteRenderer == null)
+            return;
+        if (m_Rigidbody.velocity != Vector2.zero)
+        {
+            if (Vector3.Dot(m_Rigidbody.velocity, Vector3.right) > 0.0f)
+            {
+                m_SpriteRenderer.flipX = false;
+            }
+            else
+            {
+                m_SpriteRenderer.flipX = true;
+            }
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         bool collisionFromBottom = false;
@@ -141,5 +165,11 @@ public class BouboulAIComponent : MonoBehaviour
             m_OnGround = true;
             m_delayBeforeJumpTimer = 0.0f;
         }
+    }
+
+    public void OnCollectedByPlayer(PlayerComponent playerComponent)
+    {
+        Debug.Log("Collected By Player");
+        m_isOwned = true;
     }
 }

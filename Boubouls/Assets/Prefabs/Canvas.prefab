@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AimPointer: {fileID: 6911903133171134683}
-  m_PosOffset2D: {x: 0, y: 0}
+  m_PosOffset2D: {x: 0, y: 100}
   m_Radius: 200
   m_PlayerComponent: {fileID: 0}
   m_InteractControlIcon: {fileID: 6768659346942633514}

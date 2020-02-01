@@ -7,17 +7,28 @@ public class PlayerComponent : MonoBehaviour
 {
     public float m_Speed = 50.0f;
     public float m_RunSpeed = 110.0f;
-    public float m_JumpForce = 250;
-    public Vector2 m_Velocity = new Vector2();
-    public bool m_OnGround = true;
-    public Vector2 m_GroundRight = new Vector2(1.0f, 0.0f);
+    public float m_JumpForce = 250.0f;
     public uint m_AllowedJumpCount = 2;
     public uint m_CurrentJumpCount = 0;
+
+    public Rigidbody2D m_ProjectileGameObject = null;
+    public SpriteRenderer m_SpriteRenderer = null;
+    public float m_ProjectileForce = 500.0f;
+    public GameObject m_MuzzleDummy;
 
     public Vector2 m_AimingDir { get; private set; } = new Vector2();
     private Vector2 m_MousePosition = new Vector2();
     private Rigidbody2D m_Rigidbody2D = null;
+
+    [Header("Debug")]
+    [SerializeField]
     private bool m_IsRunning = false;
+    [SerializeField]
+    private bool m_OnGround = true;
+    [SerializeField]
+    private Vector2 m_GroundRight = new Vector2(1.0f, 0.0f);
+    [SerializeField]
+    private Vector2 m_Velocity = new Vector2();
 
     private List<InteractiveComponent> m_InteractivesInRange;
     private float m_InteractStart = -1f;
@@ -30,6 +41,24 @@ public class PlayerComponent : MonoBehaviour
     void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+    }
+
+    void UpdateSpriteRenderer()
+    {
+        if (m_SpriteRenderer == null)
+            return;
+
+        if (m_Rigidbody2D.velocity != Vector2.zero)
+        {
+            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) > 0.0f)
+            {
+                m_SpriteRenderer.flipX = false;
+            }
+            else
+            {
+                m_SpriteRenderer.flipX = true;
+            }
+        }
     }
 
     public float GetCurrentSpeed()
@@ -47,7 +76,9 @@ public class PlayerComponent : MonoBehaviour
 
     private void Update()
     {
-        if(ClosestInteractive != null && m_InteractStart >= 0f)
+        UpdateSpriteRenderer();
+
+        if (ClosestInteractive != null && m_InteractStart >= 0f)
         {
             ClosestInteractive.Interact(Time.time - m_InteractStart);
         }
@@ -116,6 +147,13 @@ public class PlayerComponent : MonoBehaviour
     public void OnFire(InputValue value)
     {
         m_IsRunning = value.isPressed;
+        if (m_AimingDir != Vector2.zero)
+        {
+            Debug.Log("Fire!");
+            Rigidbody2D projectile = Instantiate<Rigidbody2D>(m_ProjectileGameObject, m_MuzzleDummy.transform.position, Quaternion.identity);
+            projectile.AddForce(m_AimingDir.normalized * m_ProjectileForce, ForceMode2D.Impulse);
+        }
+
     }
 
     public void OnInteract(InputValue value)
