@@ -14,7 +14,7 @@ public class BouboulAIComponent : MonoBehaviour
 
     public Vector2 m_Velocity = new Vector2(0.0f, 0.0f);
 
-    public Vector2 m_delayBeforeJump = new Vector2(0.7f, 1.2f);
+    public Vector2 m_delayBeforeJump = new Vector2(0.65f, 1.5f);
     public float m_delayBeforeJumpTimer = 0.0f;
 
     public float m_MaxDistanceWithPlayer = 2.5f;
@@ -42,16 +42,16 @@ public class BouboulAIComponent : MonoBehaviour
     float GetDelayBeforeJump()
     {
         if (m_IsFollowing)
-            return 0.0f;
+            return 0.16f;
         float currentSqrSpeed = m_Rigidbody.velocity.sqrMagnitude;
-        float delayBeforeJumpFactor = Map(currentSqrSpeed, 0.0f, 12.0f, 1.0f, 0.15f);
+        float delayBeforeJumpFactor = Map(currentSqrSpeed, 0.0f, 12.0f, 1.0f, 0.4f);
         return Random.Range(m_delayBeforeJump.x, m_delayBeforeJump.y) * delayBeforeJumpFactor;
     }
 
     float GetJumpForce()
     {
         float jumpForce = Random.Range(m_JumpForce.x, m_JumpForce.y);
-        float jumpForceFactor = Map(m_Rigidbody.velocity.sqrMagnitude, 0.0f, 12.0f, 1.0f, 0.25f);
+        float jumpForceFactor = Map(m_Rigidbody.velocity.sqrMagnitude, 0.0f, 12.0f, 1.0f, 0.5f);
         return jumpForce * jumpForceFactor;
     }
     // Start is called before the first frame update

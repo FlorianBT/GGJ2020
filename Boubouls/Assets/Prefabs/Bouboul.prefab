@@ -237,7 +237,7 @@ MonoBehaviour:
   m_SpriteRenderer: {fileID: 7307450649667459654}
   m_Animator: {fileID: 4127901427245988795}
   m_Velocity: {x: 0, y: 0}
-  m_delayBeforeJump: {x: 0.75, y: 1.25}
+  m_delayBeforeJump: {x: 0.65, y: 1.5}
   m_delayBeforeJumpTimer: 0
   m_MaxDistanceWithPlayer: 3
   m_MinDistanceWithPlayer: 1.5
