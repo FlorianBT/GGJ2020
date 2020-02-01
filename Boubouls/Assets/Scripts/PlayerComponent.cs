@@ -14,6 +14,7 @@ public class PlayerComponent : MonoBehaviour
     public uint m_AllowedJumpCount = 2;
     public uint m_CurrentJumpCount = 0;
 
+    public Vector2 m_AimingDir { get; private set; } = new Vector2();
     private Vector2 m_MousePosition = new Vector2();
     private Rigidbody2D m_Rigidbody2D = null;
     private bool m_IsRunning = false;
@@ -67,6 +68,11 @@ public class PlayerComponent : MonoBehaviour
         float moveFactor = value.Get<Vector2>().x;
         m_Velocity = m_GroundRight * moveFactor;
         Debug.DrawRay(transform.position, m_Velocity, Color.red);
+    }
+
+    public void OnLook(InputValue value)
+    {
+        m_AimingDir = value.Get<Vector2>();
     }
 
     public void OnTeleportDebug(InputValue value)
