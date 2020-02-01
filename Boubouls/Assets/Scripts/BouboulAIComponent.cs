@@ -73,6 +73,7 @@ public class BouboulAIComponent : MonoBehaviour
         if (m_Animator != null)
         {
             m_Animator.SetTrigger("Jump");
+            m_Animator.SetBool("OnGround", false);
         }
     }
 
@@ -158,7 +159,7 @@ public class BouboulAIComponent : MonoBehaviour
             for (int i = 0; i < collision.contacts.Length; i++)
             {
                 ContactPoint2D contact = collision.contacts[0];
-                if (Vector3.Dot(contact.normal, Vector3.up) > 0.5)
+                if (Vector3.Dot(contact.normal, Vector3.up) > 0.35)
                 {
                     collisionFromBottom = true;
                 }
@@ -172,6 +173,7 @@ public class BouboulAIComponent : MonoBehaviour
             if (m_Animator != null)
             {
                 m_Animator.SetTrigger("OnGround");
+                m_Animator.SetBool("OnGround", true);
             }
         }
     }

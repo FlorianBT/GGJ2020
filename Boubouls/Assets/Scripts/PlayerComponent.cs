@@ -57,9 +57,9 @@ public class PlayerComponent : MonoBehaviour
         float horizontalVelocity = Mathf.Abs(m_Rigidbody2D.velocity.x);
         m_Animator.SetFloat("Speed", horizontalVelocity);
 
-        if (m_Rigidbody2D.velocity != Vector2.zero)
+        if (Mathf.Abs(m_Rigidbody2D.velocity.x) > Mathf.Epsilon)
         {
-            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) > 0.0f)
+            if (Vector3.Dot(m_Rigidbody2D.velocity, Vector3.right) >= 0.0f)
             {
                 m_SpriteRenderer.flipX = false;
             }
