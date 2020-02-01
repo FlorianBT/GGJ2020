@@ -6,7 +6,7 @@ public class BouboulAIComponent : MonoBehaviour
     public string m_PlayerTag = "Player";
     public float m_MovementSpeed = 4.0f;
 
-    private GameObject m_Player = null;
+    private PlayerComponent m_Player = null;
     private Rigidbody2D m_Rigidbody = null;
     [SerializeField]
     public SpriteRenderer m_SpriteRenderer = null;
@@ -56,7 +56,6 @@ public class BouboulAIComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Player = GameObject.FindGameObjectWithTag(m_PlayerTag);
         m_Rigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -170,6 +169,7 @@ public class BouboulAIComponent : MonoBehaviour
     public void OnCollectedByPlayer(PlayerComponent playerComponent)
     {
         Debug.Log("Collected By Player");
+        m_Player = playerComponent;
         m_isOwned = true;
     }
 }
