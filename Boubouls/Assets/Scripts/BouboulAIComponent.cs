@@ -187,6 +187,18 @@ public class BouboulAIComponent : MonoBehaviour
     public void Explode()
     {
         //TODO spawn death animation
+        Kill();
+    }
+
+    public void SquashDead()
+    {
+        //TODO squash death animation
+        Kill();
+    }
+
+    private void Kill()
+    {
+        //TODO sound ?
         GameObject.Destroy(gameObject);
     }
 }

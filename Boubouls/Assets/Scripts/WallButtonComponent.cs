@@ -9,6 +9,14 @@ public class WallButtonComponent : MonoBehaviour
     private Collider2D m_Collider2D;
     private bool m_Pressed = false;
 
+    private void Awake()
+    {
+        if (OnPressedEvent == null)
+        {
+            OnPressedEvent = new UnityEvent();
+        }
+    }
+
     private void Start()
     {
         m_Collider2D = GetComponent<Collider2D>();

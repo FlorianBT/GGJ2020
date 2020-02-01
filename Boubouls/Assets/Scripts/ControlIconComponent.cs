@@ -36,4 +36,9 @@ public class ControlIconComponent : MonoBehaviour
         ratio = Mathf.Clamp01(ratio);
         m_Filler.fillAmount = ratio;
     }
+
+    public void Reset()
+    {
+        Fill(0f);
+    }
 }

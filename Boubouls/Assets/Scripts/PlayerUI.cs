@@ -62,7 +62,7 @@ public class PlayerUI : MonoBehaviour
         {
             m_InteractControlIcon.SetVisibility(true);
             m_InteractControlIcon.AlignOn(inter, m_ControlIconOffset2D);
-            if (inter.holdDuration > 0f && m_PlayerComponent.InteractDuration > 0f)
+            if (inter.holdDuration > 0f)
             {
                  m_InteractControlIcon.Fill(m_PlayerComponent.InteractDuration / inter.holdDuration);
             }
