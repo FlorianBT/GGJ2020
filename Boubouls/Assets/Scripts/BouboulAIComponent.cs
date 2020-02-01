@@ -22,6 +22,8 @@ public class BouboulAIComponent : MonoBehaviour
 
     public Vector2 m_JumpForce = new Vector2(130, 170);
 
+    public bool m_IsCarried = false;
+
     [Header("Debug")]
     [SerializeField]
     private bool m_OnGround = false;
@@ -65,6 +67,9 @@ public class BouboulAIComponent : MonoBehaviour
 
     void Update()
     {
+        if (m_IsCarried)
+            return;
+
         UpdateTimers();
 
         if (m_OnGround && m_delayBeforeJumpTimer > GetDelayBeforeJump())
@@ -96,10 +101,20 @@ public class BouboulAIComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (m_IsCarried)
+            return;
+
         if (m_IsFollowing)
         {
             m_Rigidbody.AddForce(m_Velocity);
         }
+
+        float maxHorizontalVelocity = 4.0f;
+        if (Mathf.Abs(m_Rigidbody.velocity.x) > maxHorizontalVelocity)
+        {
+            m_Rigidbody.velocity = new Vector2(Mathf.Sign(m_Rigidbody.velocity.x) * maxHorizontalVelocity, m_Rigidbody.velocity.y);
+        }
+
     }
     void UpdateTimers()
     {
