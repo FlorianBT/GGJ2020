@@ -37,6 +37,8 @@ public class BouboulAIComponent : MonoBehaviour
 
     float GetDelayBeforeJump()
     {
+        if (m_IsFollowing)
+            return 0.0f;
         float currentSqrSpeed = m_Rigidbody.velocity.sqrMagnitude;
         float delayBeforeJumpFactor = Map(currentSqrSpeed, 0.0f, 12.0f, 1.0f, 0.15f);
         return Random.Range(m_delayBeforeJump.x, m_delayBeforeJump.y) * delayBeforeJumpFactor;
