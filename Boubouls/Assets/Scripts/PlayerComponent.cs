@@ -85,6 +85,11 @@ public class PlayerComponent : MonoBehaviour
         m_IsRunning = value.isPressed;
     }
 
+    public void OnInteract(InputValue value)
+    {
+        Debug.Log("Interact");
+    }
+
     public void OnCollisionEnter2D(Collision2D collision2D)
     {
         m_OnGround = true;
