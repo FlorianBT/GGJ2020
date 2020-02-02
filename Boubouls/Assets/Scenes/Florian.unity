@@ -1465,7 +1465,7 @@ PrefabInstance:
     - target: {fileID: 534200234965520178, guid: 665cb7c5c51dcc445867ca9d4df5459f,
         type: 3}
       propertyPath: m_DeadZone.m_Center.y
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 534200234965520178, guid: 665cb7c5c51dcc445867ca9d4df5459f,
         type: 3}
@@ -1475,7 +1475,7 @@ PrefabInstance:
     - target: {fileID: 534200234965520178, guid: 665cb7c5c51dcc445867ca9d4df5459f,
         type: 3}
       propertyPath: m_DeadZone.m_Extent.y
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 534200234965520178, guid: 665cb7c5c51dcc445867ca9d4df5459f,
         type: 3}

@@ -9,17 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/FirstScene.unity
     guid: 787a83be06043404497f0b03eb0503b8
   - enabled: 1
+    path: Assets/Scenes/SecondScene.unity
+    guid: 36940b1ae5e64964cba4ee4829a9a893
+  - enabled: 1
     path: Assets/Scenes/Tibo.unity
     guid: 259c99e024133ae47a0dd32e6d8690fe
   - enabled: 1
-    path: Assets/Scenes/Florian.unity
-    guid: 87300d6e9a9567c46b4d6946f2c66ee2
-  - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
     path: Assets/Scenes/Marie.unity
     guid: 3cf6aad834000ed4fbbe21b615b8d773
+  - enabled: 1
+    path: Assets/Scenes/Final.unity
+    guid: 46042d22f5829c6449520f9bf5c18076
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 350e082db2cb8504b85dcedf3c4bc64d,
       type: 2}
