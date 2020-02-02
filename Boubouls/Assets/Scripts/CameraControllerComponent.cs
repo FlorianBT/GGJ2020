@@ -3,13 +3,14 @@
 public class CameraControllerComponent : MonoBehaviour
 {
     public Bounds m_DeadZone;
-    //public Bounds m_Bounds;
     public int m_DampDurationMS = 750;
 
     private GameObject m_Player;
     private Camera m_Camera;
 
     private Vector3 m_DeltaCenterVec;
+    private Vector2 m_CamExtents;
+    private Bounds m_WorldBounds;
 
     private Vector2 PlayerPos {
         get {
@@ -28,6 +29,14 @@ public class CameraControllerComponent : MonoBehaviour
             m_Camera.transform.position = newPos;
         }
     }
+
+    private bool WorldBound {
+        get { return m_WorldBounds != null && (m_WorldBounds.extents.x > 0f || m_WorldBounds.extents.y > 0f); }
+    }
+
+    private bool HasDeadZone {
+        get { return m_DeadZone != null && (m_DeadZone.extents.x > 0f || m_DeadZone.extents.y > 0f); }
+    }
  
     private void Start()
     {
@@ -37,9 +46,12 @@ public class CameraControllerComponent : MonoBehaviour
         m_Player = GameObject.FindWithTag("Player");
         Debug.Assert(m_Player != null, "Camera Controller could not find a valid Player in the scene");
         
-        CamPos = PlayerPos;
-
         m_DeltaCenterVec = VPToWPoint(new Vector3(0.5f, 0.5f, 0)) - VPToWPoint(m_DeadZone.center);
+
+        float h = m_Camera.orthographicSize;
+        m_CamExtents = new Vector2(h * (Screen.width / Screen.height), h);
+
+        CamPos = PlayerPos;
     }
     
     private void LateUpdate()
@@ -51,42 +63,46 @@ public class CameraControllerComponent : MonoBehaviour
         Vector3 dummy = Vector3.zero;
         tempVec = Vector3.SmoothDamp(transform.position, destination, ref dummy, m_DampDurationMS / 1000f);
 
-        float halfDZWidth = m_DeadZone.extents.x * 0.5f;
-        if (delta.x > halfDZWidth)
+        if(HasDeadZone)
         {
-            tempVec.x = PlayerPos.x - halfDZWidth + m_DeltaCenterVec.x;
-        }
-        if (delta.x < -halfDZWidth)
-        {
-            tempVec.x = PlayerPos.x + halfDZWidth + m_DeltaCenterVec.x;
+            // Check player in Dead Zone
+            if (delta.x > m_DeadZone.extents.x)
+            {
+                tempVec.x = PlayerPos.x - m_DeadZone.extents.x + m_DeltaCenterVec.x;
+            }
+            if (delta.x < -m_DeadZone.extents.x)
+            {
+                tempVec.x = PlayerPos.x + m_DeadZone.extents.x + m_DeltaCenterVec.x;
+            }
+
+            if (delta.y > m_DeadZone.extents.y)
+            {
+                tempVec.y = PlayerPos.y - m_DeadZone.extents.y + m_DeltaCenterVec.y;
+            }
+            if (delta.y < -m_DeadZone.extents.y)
+            {
+                tempVec.y = PlayerPos.y + m_DeadZone.extents.y + m_DeltaCenterVec.y;
+            }
         }
 
-        float halfDZHeight = m_DeadZone.extents.y * 0.5f;
-        if (delta.y > halfDZHeight)
+        if (WorldBound)
         {
-            tempVec.y = PlayerPos.y - halfDZHeight + m_DeltaCenterVec.y;
-        }
-        if (delta.y < -halfDZHeight)
-        {
-            tempVec.y = PlayerPos.y + halfDZHeight + m_DeltaCenterVec.y;
+            //Clamp to World
+            //TODO check world bounds better
+            tempVec.x = Mathf.Clamp(tempVec.x, -m_WorldBounds.extents.x + m_CamExtents.x, m_WorldBounds.extents.x - m_CamExtents.x);
+            tempVec.y = Mathf.Clamp(tempVec.y, -m_WorldBounds.extents.y + m_CamExtents.y, m_WorldBounds.extents.y - m_CamExtents.y);
         }
 
-        /*
-        if (isBoundHorizontal)
-        {
-            tempVec.x = Mathf.Clamp(tempVec.x, leftBound + horzExtent, rightBound - horzExtent);
-        }
-
-        if (isBoundVertical)
-        {
-            tempVec.y = Mathf.Clamp(tempVec.y, lowerBound + vertExtent, upperBound - vertExtent);
-        }
-        */
         CamPos = tempVec;
     }
 
     private Vector2 VPToWPoint(Vector2 worldPoint)
     {
         return m_Camera.ViewportToWorldPoint(worldPoint);
+    }
+
+    public void OnLevelLoaded(LevelComponent lvl)
+    {
+        m_WorldBounds = lvl.GetTotalBounds();
     }
 }
