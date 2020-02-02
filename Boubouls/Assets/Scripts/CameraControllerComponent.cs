@@ -2,13 +2,14 @@
 
 public class CameraControllerComponent : MonoBehaviour
 {
-    public Vector2 m_DeadZone = Vector2.zero;
-    public int m_LerpDurationMS = 750;
+    public Bounds m_DeadZone;
+    //public Bounds m_Bounds;
+    public int m_DampDurationMS = 750;
 
     private GameObject m_Player;
-    private Vector2 m_LookAt;
     private Camera m_Camera;
-    private float m_LerpStart = -1f;
+
+    private Vector3 m_DeltaCenterVec;
 
     private Vector2 PlayerPos {
         get {
@@ -27,7 +28,7 @@ public class CameraControllerComponent : MonoBehaviour
             m_Camera.transform.position = newPos;
         }
     }
-
+ 
     private void Start()
     {
         m_Camera = GetComponent<Camera>();
@@ -35,42 +36,57 @@ public class CameraControllerComponent : MonoBehaviour
 
         m_Player = GameObject.FindWithTag("Player");
         Debug.Assert(m_Player != null, "Camera Controller could not find a valid Player in the scene");
-
-        m_DeadZone = new Vector2(Mathf.Max(Mathf.Abs(m_DeadZone.x),1f), Mathf.Max(Mathf.Abs(m_DeadZone.y), 1f));
         
         CamPos = PlayerPos;
+
+        m_DeltaCenterVec = VPToWPoint(new Vector3(0.5f, 0.5f, 0)) - VPToWPoint(m_DeadZone.center);
     }
     
-    private void Update()
+    private void LateUpdate()
     {
-        if(m_LerpStart >= 0f) //Transitioning to player
+        Vector3 tempVec = Vector3.zero;
+        Vector2 delta = PlayerPos - VPToWPoint(m_DeadZone.center);
+        Vector3 destination = CamPos + delta;
+
+        Vector3 dummy = Vector3.zero;
+        tempVec = Vector3.SmoothDamp(transform.position, destination, ref dummy, m_DampDurationMS / 1000f);
+
+        float halfDZWidth = m_DeadZone.extents.x * 0.5f;
+        if (delta.x > halfDZWidth)
         {
-            LockOnPlayer();
+            tempVec.x = PlayerPos.x - halfDZWidth + m_DeltaCenterVec.x;
         }
-        else if(IsOutsideDeadzone())
+        if (delta.x < -halfDZWidth)
         {
-            m_LerpStart = Time.time;
+            tempVec.x = PlayerPos.x + halfDZWidth + m_DeltaCenterVec.x;
         }
+
+        float halfDZHeight = m_DeadZone.extents.y * 0.5f;
+        if (delta.y > halfDZHeight)
+        {
+            tempVec.y = PlayerPos.y - halfDZHeight + m_DeltaCenterVec.y;
+        }
+        if (delta.y < -halfDZHeight)
+        {
+            tempVec.y = PlayerPos.y + halfDZHeight + m_DeltaCenterVec.y;
+        }
+
+        /*
+        if (isBoundHorizontal)
+        {
+            tempVec.x = Mathf.Clamp(tempVec.x, leftBound + horzExtent, rightBound - horzExtent);
+        }
+
+        if (isBoundVertical)
+        {
+            tempVec.y = Mathf.Clamp(tempVec.y, lowerBound + vertExtent, upperBound - vertExtent);
+        }
+        */
+        CamPos = tempVec;
     }
 
-    private bool IsOutsideDeadzone()
+    private Vector2 VPToWPoint(Vector2 worldPoint)
     {
-        Vector2 delta = PlayerPos - CamPos;
-        bool xOver = Mathf.Abs(delta.x) > m_DeadZone.x;
-        bool yOver = Mathf.Abs(delta.y) > m_DeadZone.y;
-        return (xOver || yOver);
-    }
-
-    private void LockOnPlayer()
-    {
-        float elapsed = Time.time - m_LerpStart;
-        float ratio = Mathf.Clamp01(elapsed / (m_LerpDurationMS / 1000f));
-
-        CamPos = Vector2.Lerp(CamPos, PlayerPos, ratio);
-
-        if(Vector2.Distance(PlayerPos,CamPos) <= Mathf.Epsilon)
-        {
-            m_LerpStart = -1f;
-        }
+        return m_Camera.ViewportToWorldPoint(worldPoint);
     }
 }
