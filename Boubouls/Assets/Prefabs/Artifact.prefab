@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdDuration: 3
-  BrokenSprite: {fileID: 21300000, guid: 17e82a85dd2c2c24a9bf672cfcedabe2, type: 3}
+  BrokenSprite: {fileID: 21300000, guid: 761d862f5970fcb44b98f185aaffb546, type: 3}
   RepairedSprite: {fileID: 21300000, guid: 17e82a85dd2c2c24a9bf672cfcedabe2, type: 3}
 --- !u!212 &5000874899031090591
 SpriteRenderer:
