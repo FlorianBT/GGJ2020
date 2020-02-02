@@ -8,7 +8,13 @@ public class ArtifactPieceComponent : MonoBehaviour
 
     private PlayerComponent m_Target = null;
     private float m_CollectTime = 0f;
-     
+    private float startHeight = 0f;
+    
+    private void Start()
+    {
+        startHeight = transform.position.y;
+    }
+
     private void Update()
     {
         if(m_Target != null)
@@ -27,7 +33,7 @@ public class ArtifactPieceComponent : MonoBehaviour
         else
         {
             transform.Rotate(Vector3.back, m_RotationSpeed * Time.deltaTime);
-            transform.localPosition = new Vector3(transform.localPosition.x, (1f + Mathf.Sin(Time.time)) * m_BounceHeight, transform.localPosition.z);
+            transform.position = new Vector3(transform.position.x, startHeight + (1f + Mathf.Sin(Time.time)) * m_BounceHeight, transform.position.z);
         }
     }
 
