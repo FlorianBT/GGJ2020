@@ -9,6 +9,6 @@ public abstract class InteractiveComponent : MonoBehaviour
         get; protected set;
     }
 
-    public abstract bool CanInteract(PlayerComponent player);
+    public abstract bool CanInteract();
     public abstract void Interact(float elapsedTime);
 }

@@ -60,7 +60,7 @@ public class PlayerUI : MonoBehaviour
     void UpdateClosestInteractive()
     {
         InteractiveComponent inter = m_PlayerComponent.ClosestInteractive;
-        if (inter != null && inter.CanInteract(m_PlayerComponent))
+        if (inter != null && inter.CanInteract())
         {
             m_InteractControlIcon.SetVisibility(true);
             m_InteractControlIcon.AlignOn(inter, m_ControlIconOffset2D);
@@ -84,7 +84,7 @@ public class PlayerUI : MonoBehaviour
         ArtifactComponent artifact = m_PlayerComponent.ClosestInteractive.GetComponent<ArtifactComponent>();
         if(artifact == null) return;
 
-        if(!artifact.CanInteract(m_PlayerComponent))
+        if(!artifact.CanInteract())
         {
             int missing = 3 - m_PlayerComponent.PiecesOwned;
             m_ArtifactUI.SetCount(missing);

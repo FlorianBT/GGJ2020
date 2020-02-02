@@ -260,6 +260,11 @@ public class PlayerComponent : MonoBehaviour
                 else return -1;
             }
         );
+
+        if(inter.GetComponent<ArtifactComponent>() != null)
+        {
+            inter.GetComponent<ArtifactComponent>().Locked = PiecesOwned < 3;
+        }
     }
 
     public void ForgetInteractive(InteractiveComponent inter)

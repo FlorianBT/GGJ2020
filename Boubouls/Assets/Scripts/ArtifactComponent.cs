@@ -6,6 +6,8 @@ public class ArtifactComponent : InteractiveComponent
     public Sprite BrokenSprite;
     public Sprite RepairedSprite;
 
+    public bool Locked = true;
+
     private void Start()
     {
         GetComponent<SpriteRenderer>().sprite = Used ? RepairedSprite : BrokenSprite;
@@ -13,7 +15,7 @@ public class ArtifactComponent : InteractiveComponent
 
     public override void Interact(float elapsedTime)
     {
-        if (Used) return;
+        if (Used || Locked) return;
 
         Used = elapsedTime >= holdDuration;
         if(Used)
@@ -26,7 +28,8 @@ public class ArtifactComponent : InteractiveComponent
         }
     }
 
-    public override bool CanInteract(PlayerComponent p) {
-        return p.PiecesOwned >= 3;
+    public override bool CanInteract() {
+        Debug.Log("CanInteract Artifact return " + !Locked);
+        return !Locked;
     }
 }
