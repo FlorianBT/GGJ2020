@@ -193,6 +193,7 @@ public class PlayerComponent : MonoBehaviour
                     bouboul.m_IsCarried = true;
                     //Rigidbody2D projectile = Instantiate<Rigidbody2D>(m_ProjectileGameObject, GetMuzzlePosition(), Quaternion.identity);
                     bouboul.transform.position = GetMuzzlePosition();
+                    bouboul.OnShoot();
 
                     bouboul.GetComponent<Rigidbody2D>().AddForce(m_AimingDir.normalized * m_ProjectileForce, ForceMode2D.Impulse);
                 }

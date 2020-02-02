@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public PlayerComponent m_PlayerPrefab = null;
     private PlayerComponent m_PlayerRef = null;
 
+    public InputActionAsset m_InputActionAsset = null;
+
     UnityEvent OnFadeFinished;
 
     void Awake()
@@ -36,6 +38,8 @@ public class GameManager : MonoBehaviour
     {
         m_PlayerRef = Instantiate<PlayerComponent>(m_PlayerPrefab);
         m_PlayerRef.gameObject.name = "LocalPlayer";
+        PlayerInput playerInput = m_PlayerRef.GetComponent<PlayerInput>();
+        playerInput.actions = m_InputActionAsset;
         DontDestroyOnLoad(m_PlayerRef);
     }
 

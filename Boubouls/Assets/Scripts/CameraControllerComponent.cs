@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraControllerComponent : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class CameraControllerComponent : MonoBehaviour
     private Vector3 m_DeltaCenterVec;
     private Vector2 m_CamExtents;
     private Bounds m_WorldBounds;
+
+    [Header("Shake")]
+    // How long the object should shake for.
+    public float shakeDuration = 0.5f;
+    // Amplitude of the shake. A larger value shakes the camera harder.
+    public float shakeAmount = 0.7f;
 
     private Vector2 PlayerPos {
         get {
@@ -43,19 +50,38 @@ public class CameraControllerComponent : MonoBehaviour
         m_Camera = GetComponent<Camera>();
         Debug.Assert(m_Camera != null, "Camera Controller not attached to a camera");
 
-        m_Player = GameObject.FindWithTag("Player");
-        Debug.Assert(m_Player != null, "Camera Controller could not find a valid Player in the scene");
-        
         m_DeltaCenterVec = VPToWPoint(new Vector3(0.5f, 0.5f, 0)) - VPToWPoint(m_DeadZone.center);
 
         float h = m_Camera.orthographicSize;
         m_CamExtents = new Vector2(h * (Screen.width / Screen.height), h);
 
+        EventManager.StartListening("Shake", OnShakeEvent);
+        Debug.Log("Listening Shake event");
+
+        EventManager.StartListening("LocalPlayerSpawned", OnLocalPlayerSpawned);
+    }
+
+    void OnLocalPlayerSpawned()
+    {
+        EventManager.StopListening("LocalPlayerSpawned", OnLocalPlayerSpawned);
+
+        m_Player = GameObject.FindWithTag("Player");
+        Debug.Assert(m_Player != null, "Camera Controller could not find a valid Player in the scene");
         CamPos = PlayerPos;
+
+    }
+
+    private void Stop()
+    {
+        Debug.Log("Unlistening Shake event");
+        EventManager.StopListening("Shake", OnShakeEvent);
     }
     
     private void LateUpdate()
     {
+        if (m_Player == null)
+            return;
+
         Vector3 tempVec = Vector3.zero;
         Vector2 delta = PlayerPos - VPToWPoint(m_DeadZone.center);
         Vector3 destination = CamPos + delta;
@@ -104,5 +130,26 @@ public class CameraControllerComponent : MonoBehaviour
     public void OnLevelLoaded(LevelComponent lvl)
     {
         m_WorldBounds = lvl.GetTotalBounds();
+    }
+
+    void OnShakeEvent()
+    {
+        Debug.Log("Shake requested, lets go!");
+        StartCoroutine(Shake());
+    }
+
+    IEnumerator Shake()
+    {
+        Vector3 originalPos = transform.localPosition;
+        float shakeRemainingTime = shakeDuration;
+
+        while (shakeRemainingTime > 0.0f)
+        {
+            transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+            shakeRemainingTime -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localPosition = originalPos;
     }
 }

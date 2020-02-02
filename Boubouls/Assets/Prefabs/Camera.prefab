@@ -98,3 +98,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DeadZone: {x: 0, y: 0}
   m_LerpDurationMS: 750
+  shakeDuration: 0.2
+  shakeAmount: 0.2
