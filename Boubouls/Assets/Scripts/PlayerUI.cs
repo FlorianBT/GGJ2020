@@ -40,7 +40,7 @@ public class PlayerUI : MonoBehaviour
 
     void UpdateAimPointerPosition()
     {
-        Vector2 playerPos = m_PlayerComponent.transform.position;
+        Vector2 muzzlePos = m_PlayerComponent.GetMuzzlePosition();
         Vector2 aimDir = m_PlayerComponent.m_AimingDir;
 
         if (aimDir == Vector2.zero)
@@ -50,8 +50,8 @@ public class PlayerUI : MonoBehaviour
         else
         {
             m_AimPointer.enabled = true;
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(playerPos);
-            m_AimPointer.rectTransform.anchoredPosition = screenPos + aimDir * m_Radius + m_PosOffset2D;
+            Vector2 screenPos = Camera.main.WorldToScreenPoint(muzzlePos);
+            m_AimPointer.rectTransform.anchoredPosition = screenPos + aimDir * m_Radius;// + m_PosOffset2D;
         }
     }
 
