@@ -5,8 +5,10 @@ public class BouboulAIComponent : MonoBehaviour
 {
     public string m_PlayerTag = "Player";
     public float m_MovementSpeed = 4.0f;
-
-    private PlayerComponent m_Player = null;
+    
+    public PlayerComponent Owner {
+        get; private set;
+    }
     private Rigidbody2D m_Rigidbody = null;
     [SerializeField]
     public SpriteRenderer m_SpriteRenderer = null;
@@ -94,9 +96,9 @@ public class BouboulAIComponent : MonoBehaviour
             Jump();
         }
 
-        if (m_isOwned && m_Player != null)
+        if (m_isOwned && Owner != null)
         {
-            Vector2 meToPlayer = (m_Player.transform.position - transform.position);
+            Vector2 meToPlayer = (Owner.transform.position - transform.position);
             meToPlayer.y = 0;
             if (!m_IsFollowing && meToPlayer.sqrMagnitude > Mathf.Pow(m_MaxDistanceWithPlayer, 2.0f))
             {
@@ -192,7 +194,7 @@ public class BouboulAIComponent : MonoBehaviour
     public void OnCollectedByPlayer(PlayerComponent playerComponent)
     {
         Debug.Log("Collected By Player");
-        m_Player = playerComponent;
+        Owner = playerComponent;
         m_isOwned = true;
     }
 

@@ -36,4 +36,10 @@ public class ArtifactPieceComponent : MonoBehaviour
         m_Target = player;
         m_CollectTime = Time.time;
     }
+
+    public void OnPickedUp(BouboulAIComponent bouboul)
+    {
+        m_Target = bouboul.Owner;
+        m_CollectTime = Time.time;
+    }
 }

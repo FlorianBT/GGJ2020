@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5340201962998671937}
   - component: {fileID: 5340201962998671936}
   - component: {fileID: 5340201962998671939}
+  - component: {fileID: 7906496152660796664}
   m_Layer: 0
   m_Name: ArtifactPiece
   m_TagString: Untagged
@@ -145,3 +146,33 @@ MonoBehaviour:
   m_CollectTransitionDurationMS: 750
   m_RotationSpeed: 140
   m_BounceHeight: 0.4
+--- !u!114 &7906496152660796664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340201962998671938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8ff0f4857b24f4288ab66d28220d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Collider: {fileID: 5340201962998671937}
+  OnEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5340201962998671939}
+        m_MethodName: OnPickedUp
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: BouboulAIComponent, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
