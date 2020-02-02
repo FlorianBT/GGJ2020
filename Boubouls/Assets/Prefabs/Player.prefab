@@ -234,7 +234,7 @@ MonoBehaviour:
   m_dirtParticleSystem: {fileID: 6715944207414689696}
   m_DirtParticleLeftPos: {fileID: 1213546553940637466}
   m_DirtParticleRightPos: {fileID: 2208516989772142513}
-  m_BouboulResearchRadius: 1
+  m_BouboulResearchRadius: 1.25
   m_IsRunning: 0
   m_OnGround: 1
   m_GroundRight: {x: 1, y: 0}

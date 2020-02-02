@@ -241,7 +241,7 @@ public class PlayerComponent : MonoBehaviour
     {
         m_OnGround = true;
         m_CurrentJumpCount = 0;
-        m_GroundRight = collision2D.gameObject.transform.right;
+        m_GroundRight = Vector3.right;//collision2D.gameObject.transform.right;
     }
      
 
