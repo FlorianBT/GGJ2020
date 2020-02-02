@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    private string[] m_Scenes = new string[] { "FirstScene", "Tibo", "Marie", "Florian", "Main" };
+    private string[] m_Scenes = new string[] { "FirstScene", "SecondScene", "Tibo", "Marie", "Final" };
 
     public int m_CurrentSceneIndex = 0;
     public CanvasGroup m_FaderCanvasGroup;
