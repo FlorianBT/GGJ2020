@@ -262,10 +262,7 @@ public class PlayerComponent : MonoBehaviour
             }
         );
 
-        if(inter.GetComponent<ArtifactComponent>() != null)
-        {
-            inter.GetComponent<ArtifactComponent>().Locked = PiecesOwned < 3;
-        }
+        UpdateArtifact();
     }
 
     public void ForgetInteractive(InteractiveComponent inter)
@@ -280,10 +277,19 @@ public class PlayerComponent : MonoBehaviour
     public void OnCollectedPiece(ArtifactPieceComponent piece)
     {
         PiecesOwned++;
+        UpdateArtifact();
     }
 
     public void UsePieces()
     {
         PiecesOwned = 0;
+    }
+
+    private void UpdateArtifact()
+    {
+        if (ClosestInteractive != null && ClosestInteractive.GetComponent<ArtifactComponent>() != null)
+        {
+            ClosestInteractive.GetComponent<ArtifactComponent>().Locked = PiecesOwned < 3;
+        }
     }
 }
