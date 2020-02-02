@@ -58,7 +58,7 @@ public class PlayerUI : MonoBehaviour
     void UpdateClosestInteractive()
     {
         InteractiveComponent inter = m_PlayerComponent.ClosestInteractive;
-        if (inter != null)
+        if (inter != null && inter.CanInteract(m_PlayerComponent))
         {
             m_InteractControlIcon.SetVisibility(true);
             m_InteractControlIcon.AlignOn(inter, m_ControlIconOffset2D);

@@ -25,4 +25,8 @@ public class ArtifactComponent : InteractiveComponent
             EventManager.TriggerEvent("ArtifactDestroyed");
         }
     }
+
+    public override bool CanInteract(PlayerComponent p) {
+        return p.PiecesOwned >= 3;
+    }
 }
