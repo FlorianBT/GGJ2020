@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     private PlayerComponent m_PlayerComponent = null;
     public ControlIconComponent m_InteractControlIcon;
     public Vector2 m_ControlIconOffset2D = new Vector2(0.0f, 2.0f);
+    public ArtifactUIPiecesCount m_ArtifactUI;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class PlayerUI : MonoBehaviour
 
         UpdateAimPointerPosition();
         UpdateClosestInteractive();
+        UpdateArtifact();
     }
 
     void UpdateAimPointerPosition()
@@ -70,6 +72,24 @@ public class PlayerUI : MonoBehaviour
         else
         {
             m_InteractControlIcon.SetVisibility(false);
+        }
+    }
+
+    void UpdateArtifact()
+    {
+        m_ArtifactUI.SetVisibility(false);
+
+        if (m_PlayerComponent.ClosestInteractive == null) return;
+
+        ArtifactComponent artifact = m_PlayerComponent.ClosestInteractive.GetComponent<ArtifactComponent>();
+        if(artifact == null) return;
+
+        if(!artifact.CanInteract(m_PlayerComponent))
+        {
+            int missing = 3 - m_PlayerComponent.PiecesOwned;
+            m_ArtifactUI.SetCount(missing);
+            m_ArtifactUI.SetVisibility(true);
+            m_ArtifactUI.AlignOn(artifact, m_ControlIconOffset2D);
         }
     }
 }
