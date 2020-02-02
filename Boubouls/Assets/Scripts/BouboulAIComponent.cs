@@ -76,6 +76,11 @@ public class BouboulAIComponent : MonoBehaviour
         }
     }
 
+    public void OnShoot()
+    {
+        m_Animator.SetBool("OnGround", false);
+    }
+
     void Update()
     {
         if (m_IsCarried)
