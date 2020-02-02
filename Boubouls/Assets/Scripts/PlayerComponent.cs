@@ -22,6 +22,10 @@ public class PlayerComponent : MonoBehaviour
     private Vector2 m_MousePosition = new Vector2();
     private Rigidbody2D m_Rigidbody2D = null;
 
+    public ParticleSystem m_dirtParticleSystem = null;
+    public Transform m_DirtParticleLeftPos = null;
+    public Transform m_DirtParticleRightPos = null;
+
     public float m_BouboulResearchRadius = 2.0f;
 
     public int PiecesOwned { get; private set; }
@@ -51,17 +55,11 @@ public class PlayerComponent : MonoBehaviour
 
     public void Reset()
     {
-        if (m_SpriteRenderer != null)
-        {
-            m_SpriteRenderer.flipX = false;
-        }
+        FlipRight();
     }
 
     void UpdateSpriteRenderer()
     {
-        if (m_SpriteRenderer == null)
-            return;
-
         float horizontalVelocity = Mathf.Abs(m_Rigidbody2D.velocity.x);
         m_Animator.SetFloat("Speed", horizontalVelocity);
 
@@ -70,11 +68,25 @@ public class PlayerComponent : MonoBehaviour
             if (Vector3.Dot(m_Rigidbody2D.velocity.normalized, Vector3.right) >= Mathf.Epsilon)
             {
                 m_SpriteRenderer.flipX = false;
+                FlipRight();
             }
             else
             {
-                m_SpriteRenderer.flipX = true;
+                FlipLeft();
             }
+
+        }
+
+        if (horizontalVelocity >= 0.5f && m_OnGround)
+        {
+            if (!m_dirtParticleSystem.isPlaying)
+            {
+                m_dirtParticleSystem.Play();
+            }
+        }
+        else
+        {
+            m_dirtParticleSystem.Stop();
         }
     }
 
@@ -101,6 +113,20 @@ public class PlayerComponent : MonoBehaviour
         }
 
         m_InteractivesInRange.RemoveAll((inter) => { return inter.Used; });
+    }
+
+    void FlipLeft()
+    {
+        m_SpriteRenderer.flipX = true;
+        m_dirtParticleSystem.transform.position = m_DirtParticleRightPos.transform.position;
+        m_dirtParticleSystem.transform.rotation = m_DirtParticleRightPos.transform.rotation;
+    }
+
+    void FlipRight()
+    {
+        m_SpriteRenderer.flipX = false;
+        m_dirtParticleSystem.transform.position = m_DirtParticleLeftPos.transform.position;
+        m_dirtParticleSystem.transform.rotation = m_DirtParticleLeftPos.transform.rotation;
     }
 
     void FixedUpdate()
