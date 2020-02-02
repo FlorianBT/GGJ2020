@@ -28,6 +28,8 @@ public class PlayerComponent : MonoBehaviour
 
     public float m_BouboulResearchRadius = 2.0f;
 
+    public int PiecesOwned { get; private set; }
+
     [Header("Debug")]
     [SerializeField]
     private bool m_IsRunning = false;
@@ -225,7 +227,6 @@ public class PlayerComponent : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void OnInteract(InputValue value)
@@ -260,6 +261,11 @@ public class PlayerComponent : MonoBehaviour
                 else return -1;
             }
         );
+
+        if(inter.GetComponent<ArtifactComponent>() != null)
+        {
+            inter.GetComponent<ArtifactComponent>().Locked = PiecesOwned < 3;
+        }
     }
 
     public void ForgetInteractive(InteractiveComponent inter)
@@ -269,5 +275,15 @@ public class PlayerComponent : MonoBehaviour
 
     public InteractiveComponent ClosestInteractive {
         get { return (m_InteractivesInRange.Count > 0 ? m_InteractivesInRange[0] : null); }
+    }
+
+    public void OnCollectedPiece(ArtifactPieceComponent piece)
+    {
+        PiecesOwned++;
+    }
+
+    public void UsePieces()
+    {
+        PiecesOwned = 0;
     }
 }
