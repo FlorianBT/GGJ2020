@@ -173,6 +173,8 @@ public class BouboulAIComponent : MonoBehaviour
         if (m_IsCarried && collision.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
             m_IsCarried = false;
+            Debug.Log("Sending Shake Event");
+            EventManager.TriggerEvent("Shake");
         }
 
         if (collisionFromBottom)

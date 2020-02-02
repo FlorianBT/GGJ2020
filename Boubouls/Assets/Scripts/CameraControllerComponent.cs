@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraControllerComponent : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class CameraControllerComponent : MonoBehaviour
     private Vector2 m_LookAt;
     private Camera m_Camera;
     private float m_LerpStart = -1f;
+
+    [Header("Shake")]
+    // How long the object should shake for.
+    public float shakeDuration = 0.5f;
+    // Amplitude of the shake. A larger value shakes the camera harder.
+    public float shakeAmount = 0.7f;
 
     private Vector2 PlayerPos {
         get {
@@ -33,16 +40,35 @@ public class CameraControllerComponent : MonoBehaviour
         m_Camera = GetComponent<Camera>();
         Debug.Assert(m_Camera != null, "Camera Controller not attached to a camera");
 
+        m_DeadZone = new Vector2(Mathf.Max(Mathf.Abs(m_DeadZone.x),1f), Mathf.Max(Mathf.Abs(m_DeadZone.y), 1f));
+
+        EventManager.StartListening("Shake", OnShakeEvent);
+        Debug.Log("Listening Shake event");
+
+        EventManager.StartListening("LocalPlayerSpawned", OnLocalPlayerSpawned);
+    }
+
+    void OnLocalPlayerSpawned()
+    {
+        EventManager.StopListening("LocalPlayerSpawned", OnLocalPlayerSpawned);
+
         m_Player = GameObject.FindWithTag("Player");
         Debug.Assert(m_Player != null, "Camera Controller could not find a valid Player in the scene");
-
-        m_DeadZone = new Vector2(Mathf.Max(Mathf.Abs(m_DeadZone.x),1f), Mathf.Max(Mathf.Abs(m_DeadZone.y), 1f));
-        
         CamPos = PlayerPos;
+
+    }
+
+    private void Stop()
+    {
+        Debug.Log("Unlistening Shake event");
+        EventManager.StopListening("Shake", OnShakeEvent);
     }
     
     private void Update()
     {
+        if (m_Player == null)
+            return;
+
         if(m_LerpStart >= 0f) //Transitioning to player
         {
             LockOnPlayer();
@@ -72,5 +98,26 @@ public class CameraControllerComponent : MonoBehaviour
         {
             m_LerpStart = -1f;
         }
+    }
+
+    void OnShakeEvent()
+    {
+        Debug.Log("Shake requested, lets go!");
+        StartCoroutine(Shake());
+    }
+
+    IEnumerator Shake()
+    {
+        Vector3 originalPos = transform.localPosition;
+        float shakeRemainingTime = shakeDuration;
+
+        while (shakeRemainingTime > 0.0f)
+        {
+            transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+            shakeRemainingTime -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localPosition = originalPos;
     }
 }

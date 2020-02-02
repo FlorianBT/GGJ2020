@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Marie.unity
     guid: 3cf6aad834000ed4fbbe21b615b8d773
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 350e082db2cb8504b85dcedf3c4bc64d,
+      type: 2}
