@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
         EventManager.StopListening("ArtifactDestroyed", OnArtifactDestroyed);
 
         Debug.Log("[GAMEMANAGER] On Artifact Destroyed!");
+        m_PlayerRef.UsePieces();
+
         OnLevelFinished();
     }
 

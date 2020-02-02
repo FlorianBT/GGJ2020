@@ -11,6 +11,7 @@ public class PlayerUI : MonoBehaviour
     public ControlIconComponent m_InteractControlIcon;
     public Vector2 m_ControlIconOffset2D = new Vector2(0.0f, 2.0f);
     public ArtifactUIPiecesCount m_ArtifactUI;
+    public InventoryUIComponent[] m_Inventories;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class PlayerUI : MonoBehaviour
         UpdateAimPointerPosition();
         UpdateClosestInteractive();
         UpdateArtifact();
+        UpdateInventories();
     }
 
     void UpdateAimPointerPosition()
@@ -90,6 +92,20 @@ public class PlayerUI : MonoBehaviour
             m_ArtifactUI.SetCount(missing);
             m_ArtifactUI.SetVisibility(true);
             m_ArtifactUI.AlignOn(artifact, m_ControlIconOffset2D);
+        }
+    }
+
+    void UpdateInventories()
+    {
+        int m = Mathf.Min(m_Inventories.Length, m_PlayerComponent.PiecesOwned);
+        for(int i = 0; i < m; ++i)
+        {
+            m_Inventories[i].Fill();
+        }
+
+        for (int j = m; j < 3; ++j)
+        {
+            m_Inventories[j].Reset();
         }
     }
 }
