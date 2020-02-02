@@ -22,6 +22,8 @@ public class PlayerComponent : MonoBehaviour
     private Vector2 m_MousePosition = new Vector2();
     private Rigidbody2D m_Rigidbody2D = null;
 
+    public float m_BouboulResearchRadius = 2.0f;
+
     [Header("Debug")]
     [SerializeField]
     private bool m_IsRunning = false;
@@ -157,14 +159,44 @@ public class PlayerComponent : MonoBehaviour
         m_OnGround = false;
     }
 
+    public Vector2 GetMuzzlePosition()
+    {
+        return m_MuzzleDummy.transform.position;
+    }
+
     public void OnFire(InputValue value)
     {
         m_IsRunning = value.isPressed;
         if (m_AimingDir != Vector2.zero)
         {
-            Debug.Log("Fire!");
-            Rigidbody2D projectile = Instantiate<Rigidbody2D>(m_ProjectileGameObject, m_MuzzleDummy.transform.position, Quaternion.identity);
-            projectile.AddForce(m_AimingDir.normalized * m_ProjectileForce, ForceMode2D.Impulse);
+            List<Collider2D> colliders = new List<Collider2D>(5);
+            ContactFilter2D contactFilter2D = default;
+            int bouboulLayer = LayerMask.NameToLayer("Bouboul");
+            contactFilter2D.NoFilter();
+            int collidersFound = Physics2D.OverlapCircle(GetMuzzlePosition(), m_BouboulResearchRadius, contactFilter2D, colliders);
+            BouboulAIComponent bouboul = null;
+            if (collidersFound > 0)
+            {
+                for (int i = 0; i < colliders.Count; ++i)
+                {
+                    Collider2D collider = colliders[i];
+                    if (collider.gameObject.layer == bouboulLayer)
+                    {
+                        bouboul = collider.gameObject.GetComponent<BouboulAIComponent>();
+                        if (bouboul != null)
+                            break;
+                    }
+                }
+
+                if (bouboul != null)
+                {
+                    bouboul.m_IsCarried = true;
+                    //Rigidbody2D projectile = Instantiate<Rigidbody2D>(m_ProjectileGameObject, GetMuzzlePosition(), Quaternion.identity);
+                    bouboul.transform.position = GetMuzzlePosition();
+
+                    bouboul.GetComponent<Rigidbody2D>().AddForce(m_AimingDir.normalized * m_ProjectileForce, ForceMode2D.Impulse);
+                }
+            }
         }
 
     }

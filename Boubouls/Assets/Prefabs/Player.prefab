@@ -228,6 +228,7 @@ MonoBehaviour:
   m_MuzzleDummy: {fileID: 747938155}
   m_SpriteRenderer: {fileID: 2677659543508800922}
   m_Animator: {fileID: 7402873767169146513}
+  m_BouboulResearchRadius: 1
   m_IsRunning: 0
   m_OnGround: 1
   m_GroundRight: {x: 1, y: 0}
