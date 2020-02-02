@@ -56,6 +56,8 @@ public class PlayerComponent : MonoBehaviour
     public void Reset()
     {
         FlipRight();
+        PiecesOwned = 0;
+        m_InteractStart = -1f;
     }
 
     void UpdateSpriteRenderer()
@@ -268,6 +270,7 @@ public class PlayerComponent : MonoBehaviour
     public void ForgetInteractive(InteractiveComponent inter)
     {
         m_InteractivesInRange.Remove(inter);
+        m_InteractStart = -1f;
     }
 
     public InteractiveComponent ClosestInteractive {
