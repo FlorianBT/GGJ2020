@@ -29,7 +29,6 @@ public class ArtifactComponent : InteractiveComponent
     }
 
     public override bool CanInteract() {
-        Debug.Log("CanInteract Artifact return " + !Locked);
         return !Locked;
     }
 }
