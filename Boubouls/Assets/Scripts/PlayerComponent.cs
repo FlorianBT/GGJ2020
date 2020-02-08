@@ -112,6 +112,9 @@ public class PlayerComponent : MonoBehaviour
         if (ClosestInteractive != null && m_InteractStart >= 0f)
         {
             ClosestInteractive.Interact(Time.time - m_InteractStart);
+        } else
+        {
+            m_InteractStart = -1f;
         }
 
         m_InteractivesInRange.RemoveAll((inter) => { return inter.Used; });
